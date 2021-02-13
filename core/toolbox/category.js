@@ -156,7 +156,7 @@ Blockly.ToolboxCategory.nestedPadding = 19;
  * The width in pixels of the strip of colour next to each category.
  * @type {number}
  */
-Blockly.ToolboxCategory.borderWidth = 8;
+Blockly.ToolboxCategory.borderWidth = 0;
 
 /**
  * The default colour of the category. This is used as the background colour of
@@ -298,9 +298,8 @@ Blockly.ToolboxCategory.prototype.createIconDom_ = function() {
   var toolboxIcon = document.createElement('span');
   if (!this.parentToolbox_.isHorizontal()) {
     Blockly.utils.dom.addClass(toolboxIcon, this.cssConfig_['icon']);
+    toolboxIcon.style.background = this.colour_;
   }
-
-  toolboxIcon.style.display = 'inline-block';
   return toolboxIcon;
 };
 
@@ -381,6 +380,27 @@ Blockly.ToolboxCategory.prototype.getColourfromStyle_ = function(styleName) {
     var style = theme.categoryStyles[styleName];
     if (style && style.colour) {
       return this.parseColour_(style.colour);
+    } else {
+      console.warn('Style "' + styleName +
+          '" must exist and contain a colour value');
+    }
+  }
+  return '';
+};
+
+/**
+ * Sets the colour for the selected category using the style name and returns the new
+ * colour as a unparsed hex string.
+ * @param {string} styleName Name of the style.
+ * @return {string} The hex colour for the category.
+ * @private
+ */
+Blockly.ToolboxCategory.prototype.getUnparsedColourfromStyle_ = function(styleName) {
+  var theme = this.workspace_.getTheme();
+  if (styleName && theme) {
+    var style = theme.categoryStyles[styleName];
+    if (style && style.colour) {
+      return style.colour;
     } else {
       console.warn('Style "' + styleName +
           '" must exist and contain a colour value');
@@ -539,7 +559,8 @@ Blockly.ToolboxCategory.prototype.setSelected = function(isSelected) {
   if (isSelected) {
     var defaultColour = this.parseColour_(
         Blockly.ToolboxCategory.defaultBackgroundColour);
-    this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
+    //category bg when selected
+    this.rowDiv_.style.backgroundColor = this.getUnparsedColourfromStyle_('selected_category_bg_color');
     Blockly.utils.dom.addClass(this.rowDiv_, this.cssConfig_['selected']);
   } else {
     this.rowDiv_.style.backgroundColor = '';
@@ -630,6 +651,22 @@ Blockly.ToolboxCategory.prototype.dispose = function() {
  */
 Blockly.Css.register([
   /* eslint-disable indent */
+  '.blocklyToolboxCategory:first-child .blocklyTreeSelected {',
+    'border-top: none;',
+    'border-bottom: 1px solid #ccc;',
+    'margin-right: -1px;',
+    'padding-right: 1px;',
+    'background-color: rgba(255, 255, 255, 0.2);',
+  '}',
+
+  '.blocklyToolboxCategory .blocklyTreeSelected {',
+    'border-top: 1px solid #ccc;',
+    'border-bottom: 1px solid #ccc;',
+    'margin-right: -1px;',
+    'padding-right: 1px;',
+    'background-color: rgba(255, 255, 255, 0.2);',
+  '}',
+
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
     'background-color: rgba(255, 255, 255, 0.2);',
   '}',
@@ -643,10 +680,11 @@ Blockly.Css.register([
   '}',
 
   '.blocklyTreeRow {',
-    'height: 22px;',
-    'line-height: 22px;',
-    'margin-bottom: 3px;',
-    'padding-right: 8px;',
+    'height: 46px;',
+    'overflow: hidden;',
+    'margin-bottom: 0px;',
+    'padding-top: 10px;',
+    'padding-right: 0px;',
     'white-space: nowrap;',
   '}',
 
@@ -656,11 +694,17 @@ Blockly.Css.register([
   '}',
 
   '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
-    'height: 16px;',
+    'height: 20px;',
     'vertical-align: middle;',
-    'visibility: hidden;',
-    'width: 16px;',
+    'width: 20px;',
+    'display: block;',
+    'border-radius: 10px;',
+  '}',
+
+  '.blocklyTreeRowContentContainer {',
+    'display: flex;',
+    'flex-direction: column;',
+    'align-items: center;',
   '}',
 
   '.blocklyTreeIconClosed {',
@@ -689,9 +733,10 @@ Blockly.Css.register([
 
   '.blocklyTreeLabel {',
     'cursor: default;',
-    'font: 16px sans-serif;',
+    'font-size: 0.87rem;',
     'padding: 0 3px;',
     'vertical-align: middle;',
+    'display: block;',
   '}',
 
   '.blocklyToolboxDelete .blocklyTreeLabel {',
@@ -699,7 +744,6 @@ Blockly.Css.register([
   '}',
 
   '.blocklyTreeSelected .blocklyTreeLabel {',
-    'color: #fff;',
   '}'
   /* eslint-enable indent */
 ]);

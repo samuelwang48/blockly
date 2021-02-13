@@ -29,5 +29,10 @@ Blockly.Themes.Dark = Blockly.Theme.defineTheme('dark', {
     'scrollbarOpacity': 0.4,
     'cursorColour': '#d0d0d0',
     'blackBackground': '#333'
+  },
+  'categoryStyles': {
+    'selected_category_bg_color': {
+      'colour': '#252526'
+    }
   }
 });

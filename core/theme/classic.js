@@ -53,6 +53,9 @@ Blockly.Themes.Classic.defaultBlockStyles = {
 };
 
 Blockly.Themes.Classic.categoryStyles = {
+  "selected_category_bg_color": {
+    "colour": "#e4e4e4"
+  },
   "colour_category": {
     "colour": "20"
   },
