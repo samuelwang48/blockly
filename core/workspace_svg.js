@@ -354,6 +354,12 @@ Blockly.WorkspaceSvg.prototype.oldLeft_ = 0;
 Blockly.WorkspaceSvg.prototype.trashcan = null;
 
 /**
+ * The workspace's undoredo (if any).
+ * @type {Blockly.Trashcan}
+ */
+Blockly.WorkspaceSvg.prototype.undoredo = null;
+
+/**
  * This workspace's scrollbars, if they exist.
  * @type {Blockly.ScrollbarPair}
  */
@@ -826,6 +832,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.trashcan.dispose();
     this.trashcan = null;
   }
+  if (this.undoredo) {
+    this.undoredo.dispose();
+    this.undoredo = null;
+  }
   if (this.scrollbar) {
     this.scrollbar.dispose();
     this.scrollbar = null;
@@ -912,6 +922,20 @@ Blockly.WorkspaceSvg.prototype.addTrashcan = function() {
   this.trashcan = new Blockly.Trashcan(this);
   var svgTrashcan = this.trashcan.createDom();
   this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+};
+
+/**
+ * Add undo/redo.
+ * @package
+ */
+Blockly.WorkspaceSvg.prototype.addUndoredo = function() {
+  if (!Blockly.Undoredo) {
+    throw Error('Missing require for Blockly.Undoredo');
+  }
+  /** @type {Blockly.Trashcan} */
+  this.undoredo = new Blockly.Undoredo(this);
+  var svgUndoredo = this.undoredo.createDom();
+  this.svgGroup_.insertBefore(svgUndoredo, this.svgBlockCanvas_);
 };
 
 /**
@@ -1038,6 +1062,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   }
   if (this.trashcan) {
     this.trashcan.position();
+  }
+  if (this.undoredo) {
+    this.undoredo.position();
   }
   if (this.zoomControls_) {
     this.zoomControls_.position();

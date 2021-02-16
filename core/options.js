@@ -37,6 +37,7 @@ Blockly.Options = function(options) {
     var toolboxJsonDef = null;
     var hasCategories = false;
     var hasTrashcan = false;
+    var hasUndoredo = true;
     var hasCollapse = false;
     var hasComments = false;
     var hasDisable = false;
@@ -56,6 +57,7 @@ Blockly.Options = function(options) {
     } else {
       maxTrashcanContents = 0;
     }
+    var hasUndoredo = true;
     var hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
@@ -137,6 +139,8 @@ Blockly.Options = function(options) {
   this.hasScrollbars = this.moveOptions.scrollbars;
   /** @type {boolean} */
   this.hasTrashcan = hasTrashcan;
+  /** @type {boolean} */
+  this.hasUndoredo = hasUndoredo;
   /** @type {number} */
   this.maxTrashcanContents = maxTrashcanContents;
   /** @type {boolean} */

@@ -37,6 +37,9 @@ goog.require('Blockly.Toolbox');
 // If a trashcan on the workspace isn't required, then Blockly.inject's
 // "trashcan" configuration must be false.
 goog.require('Blockly.Trashcan');
+// If a undo/redo on the workspace isn't required, then Blockly.inject's
+// "undoredo" configuration must be false.
+goog.require('Blockly.Undoredo');
 // Only needed if one is using the 'VARIABLE_DYNAMIC' typed variables category.
 goog.require('Blockly.VariablesDynamic');
 // Only need to require these two if you're using workspace comments.

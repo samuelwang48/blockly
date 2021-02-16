@@ -168,6 +168,9 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   if (wsOptions.hasTrashcan) {
     mainWorkspace.addTrashcan();
   }
+  if (wsOptions.hasUndoredo) {
+    mainWorkspace.addUndoredo();
+  }
   if (wsOptions.zoomOptions && wsOptions.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
@@ -374,6 +377,9 @@ Blockly.init_ = function(mainWorkspace) {
   var verticalSpacing = Blockly.Scrollbar.scrollbarThickness;
   if (options.hasTrashcan) {
     verticalSpacing = mainWorkspace.trashcan.init(verticalSpacing);
+  }
+  if (options.hasUndoredo) {
+    verticalSpacing = mainWorkspace.undoredo.init(verticalSpacing);
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
     mainWorkspace.zoomControls_.init(verticalSpacing);
