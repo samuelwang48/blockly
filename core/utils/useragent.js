@@ -59,6 +59,9 @@ Blockly.utils.userAgent.TABLET;
 /** @const {boolean} */
 Blockly.utils.userAgent.MOBILE;
 
+/** @const {boolean} */
+Blockly.utils.userAgent.RUKKOU_IOS;
+
 (function(raw) {
   Blockly.utils.userAgent.raw = raw;
   var rawUpper = Blockly.utils.userAgent.raw.toUpperCase();
@@ -107,4 +110,6 @@ Blockly.utils.userAgent.MOBILE;
   Blockly.utils.userAgent.MOBILE = !Blockly.utils.userAgent.TABLET &&
       (Blockly.utils.userAgent.IPOD || Blockly.utils.userAgent.IPHONE ||
        Blockly.utils.userAgent.ANDROID || has('IEMobile'));
+
+  Blockly.utils.userAgent.RUKKOU_IOS = has('rukkou-ios');
 })((Blockly.utils.global.navigator && Blockly.utils.global.navigator.userAgent) || '');

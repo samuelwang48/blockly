@@ -289,7 +289,10 @@ Blockly.FieldTextInput.prototype.showEditor_ = function(_opt_e,
   this.workspace_ =
     (/** @type {!Blockly.BlockSvg} */ (this.sourceBlock_)).workspace;
   var quietInput = opt_quietInput || false;
-  if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
+
+  if (!quietInput && Blockly.utils.userAgent.RUKKOU_IOS) {
+    this.showInlineEditor_(quietInput);
+  } else if (!quietInput && (Blockly.utils.userAgent.MOBILE ||
                       Blockly.utils.userAgent.ANDROID ||
                       Blockly.utils.userAgent.IPAD)) {
     this.showPromptEditor_();
