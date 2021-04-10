@@ -127,28 +127,33 @@ Blockly.WorkspaceAudio.prototype.preload = function() {
  * @param {number=} opt_volume Volume of sound (0-1).
  */
 Blockly.WorkspaceAudio.prototype.play = function(name, opt_volume) {
-  var sound = this.SOUNDS_[name];
-  if (sound) {
-    // Don't play one sound on top of another.
-    var now = new Date;
-    if (this.lastSound_ != null &&
-        now - this.lastSound_ < Blockly.SOUND_LIMIT) {
-      return;
+  if (Blockly.utils.userAgent.RUKKOU_IOS) {
+    var event = new CustomEvent('rukkou-ios-playsound', { detail: name });
+    window.dispatchEvent(event);
+  } else {
+    var sound = this.SOUNDS_[name];
+    if (sound) {
+      // Don't play one sound on top of another.
+      var now = new Date;
+      if (this.lastSound_ != null &&
+          now - this.lastSound_ < Blockly.SOUND_LIMIT) {
+        return;
+      }
+      this.lastSound_ = now;
+      var mySound;
+      if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.ANDROID) {
+        // Creating a new audio node causes lag in Android and iPad.  Android
+        // refetches the file from the server, iPad uses a singleton audio
+        // node which must be deleted and recreated for each new audio tag.
+        mySound = sound;
+      } else {
+        mySound = sound.cloneNode();
+      }
+      mySound.volume = (opt_volume === undefined ? 1 : opt_volume);
+      mySound.play();
+    } else if (this.parentWorkspace_) {
+      // Maybe a workspace on a lower level knows about this sound.
+      this.parentWorkspace_.getAudioManager().play(name, opt_volume);
     }
-    this.lastSound_ = now;
-    var mySound;
-    if (Blockly.utils.userAgent.IPAD || Blockly.utils.userAgent.ANDROID) {
-      // Creating a new audio node causes lag in Android and iPad.  Android
-      // refetches the file from the server, iPad uses a singleton audio
-      // node which must be deleted and recreated for each new audio tag.
-      mySound = sound;
-    } else {
-      mySound = sound.cloneNode();
-    }
-    mySound.volume = (opt_volume === undefined ? 1 : opt_volume);
-    mySound.play();
-  } else if (this.parentWorkspace_) {
-    // Maybe a workspace on a lower level knows about this sound.
-    this.parentWorkspace_.getAudioManager().play(name, opt_volume);
   }
 };

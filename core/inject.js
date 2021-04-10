@@ -393,8 +393,10 @@ Blockly.init_ = function(mainWorkspace) {
   }
 
   // Load the sounds.
-  if (options.hasSounds) {
-    Blockly.inject.loadSounds_(options.pathToMedia, mainWorkspace);
+  if (!Blockly.utils.userAgent.RUKKOU_IOS) {
+    if (options.hasSounds) {
+      Blockly.inject.loadSounds_(options.pathToMedia, mainWorkspace);
+    }
   }
 };
 
