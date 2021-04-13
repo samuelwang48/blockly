@@ -37,7 +37,7 @@ Blockly.Options = function(options) {
     var toolboxJsonDef = null;
     var hasCategories = false;
     var hasTrashcan = false;
-    var hasUndoredo = true;
+    var hasUndoredo = false;
     var hasCollapse = false;
     var hasComments = false;
     var hasDisable = false;
@@ -57,7 +57,6 @@ Blockly.Options = function(options) {
     } else {
       maxTrashcanContents = 0;
     }
-    var hasUndoredo = true;
     var hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
@@ -73,6 +72,11 @@ Blockly.Options = function(options) {
     var hasSounds = options['sounds'];
     if (hasSounds === undefined) {
       hasSounds = true;
+    }
+
+    var hasUndoredo = options['undoredo'];
+    if (hasUndoredo === undefined) {
+      hasUndoredo = false;
     }
   }
   var rtl = !!options['rtl'];
